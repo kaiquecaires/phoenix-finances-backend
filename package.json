@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/kaiquecaires/phoenix-finances-backend/issues"
   },
-  "homepage": "https://github.com/kaiquecaires/phoenix-finances-backend#readme"
+  "homepage": "https://github.com/kaiquecaires/phoenix-finances-backend#readme",
+  "devDependencies": {
+    "typescript": "^4.2.3"
+  }
 }
