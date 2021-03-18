@@ -13,6 +13,19 @@ describe('Signup Controller', () => {
     }
   }
 
+  test('should return 400 if name is not provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest: HttpRequest = {
+      body: {
+        email: 'any_mail@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    const httpResponse: HttpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(badRequest(new MissignParamError('name')))
+  })
+
   test('should return 400 if email is not provided', async () => {
     const { sut } = makeSut()
     const httpRequest: HttpRequest = {
