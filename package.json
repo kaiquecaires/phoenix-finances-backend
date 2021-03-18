@@ -4,7 +4,8 @@
   "description": "Aplicação para controle de gastos.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "test:unit": "jest --passWithNoTests --watch"
   },
   "repository": {
     "type": "git",
