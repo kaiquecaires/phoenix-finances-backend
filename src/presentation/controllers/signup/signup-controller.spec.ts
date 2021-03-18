@@ -1,6 +1,5 @@
-import { Controller, HttpRequest } from './signup-protocols'
+import { Controller, HttpRequest, HttpResponse, badRequest, MissignParamError } from './signup-protocols'
 import { SignupController } from './signup-controller'
-import { HttpResponse } from '../../protocols/http'
 
 describe('Signup Controller', () => {
   interface SutTypes {
@@ -24,6 +23,6 @@ describe('Signup Controller', () => {
       }
     }
     const httpResponse: HttpResponse = await sut.handle(httpRequest)
-    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse).toEqual(badRequest(new MissignParamError('email')))
   })
 })
