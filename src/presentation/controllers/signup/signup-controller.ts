@@ -2,9 +2,13 @@ import { Controller, HttpRequest, HttpResponse, MissignParamError, badRequest } 
 
 export class SignupController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    const { email } = httpRequest.body
+    const { email, name } = httpRequest.body
     if (!email) {
       return badRequest(new MissignParamError('email'))
+    }
+
+    if (!name) {
+      return badRequest(new MissignParamError('name'))
     }
   }
 }
