@@ -1,5 +1,6 @@
 export * from '../../protocols/controller'
 export * from '../../protocols/http'
 export * from '../../protocols/http'
+export * from '../../helpers/http-helper'
 export * from '../../errors/missign-param-error'
-export * from '../../herpers/http-helper'
+export * from '../../errors/invalid-param-error'
