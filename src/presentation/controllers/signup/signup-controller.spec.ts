@@ -1,4 +1,4 @@
-import { Controller, HttpRequest, HttpResponse, badRequest, MissignParamError } from './signup-protocols'
+import { Controller, HttpRequest, HttpResponse, badRequest, MissignParamError, InvalidParamError } from './signup-protocols'
 import { SignupController } from './signup-controller'
 
 describe('Signup Controller', () => {
@@ -58,10 +58,24 @@ describe('Signup Controller', () => {
       body: {
         name: 'any_name',
         email: 'any_mail@mail.com',
-        password: 'any_passwords'
+        password: 'any_password'
       }
     }
     const httpResponse: HttpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new MissignParamError('passwordConfirmation')))
+  })
+
+  test('should return 400 if passwordConfirmation is not equal to password', async () => {
+    const { sut } = makeSut()
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_mail@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'different_password'
+      }
+    }
+    const httpResponse: HttpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('passwordConfirmation')))
   })
 })
