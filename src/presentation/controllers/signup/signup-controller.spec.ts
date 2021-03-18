@@ -51,4 +51,17 @@ describe('Signup Controller', () => {
     const httpResponse: HttpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new MissignParamError('password')))
   })
+
+  test('should return 400 if passwordConfirmation is not provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_mail@mail.com',
+        password: 'any_passwords'
+      }
+    }
+    const httpResponse: HttpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(badRequest(new MissignParamError('passwordConfirmation')))
+  })
 })
