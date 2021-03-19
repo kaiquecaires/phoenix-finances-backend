@@ -1,5 +1,7 @@
 import { Controller, HttpRequest, HttpResponse, badRequest, MissignParamError, InvalidParamError, EmailValidator } from './signup-protocols'
 import { SignupController } from './signup-controller'
+import { AccountModel } from '../../../domain/models/account'
+import { AddAccount, AddAccountModel } from '../../../domain/useCases/add-account'
 
 describe('Signup Controller', () => {
   const makeEmailValidatorStub = (): EmailValidator => {
@@ -12,17 +14,37 @@ describe('Signup Controller', () => {
     return new EmailValidatorStub()
   }
 
+  const makeAddAccountStub = (): AddAccount => {
+    class AddAccountStub implements AddAccount {
+      async add (account: AddAccountModel): Promise<AccountModel> {
+        return makeFakeAccount()
+      }
+    }
+
+    return new AddAccountStub()
+  }
+
+  const makeFakeAccount = (): AccountModel => ({
+    email: 'valid_email@mail.com',
+    password: 'valid_password@password.com',
+    id: 'valid_id',
+    name: 'valid_name'
+  })
+
   interface SutTypes {
     sut: Controller
     emailValidatorStub: EmailValidator
+    addAccountStub: AddAccount
   }
 
   const makeSut = (): SutTypes => {
     const emailValidatorStub = makeEmailValidatorStub()
-    const sut = new SignupController(emailValidatorStub)
+    const addAccountStub = makeAddAccountStub()
+    const sut = new SignupController(emailValidatorStub, addAccountStub)
     return {
       sut,
-      emailValidatorStub
+      emailValidatorStub,
+      addAccountStub
     }
   }
 
@@ -135,5 +157,18 @@ describe('Signup Controller', () => {
     }
     const httpResponse: HttpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
+  })
+
+  test('expect return an Account if correct values is provided', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle({
+      body: {
+        email: 'valid_email@mail.com',
+        name: 'valid_name',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password'
+      }
+    })
+    expect(httpResponse.body.id).toBeTruthy()
   })
 })
