@@ -1,8 +1,12 @@
+import { AddAccount } from '../../../domain/useCases/add-account'
 import { EmailValidator } from '../../protocols/email-validator'
 import { Controller, HttpRequest, HttpResponse, MissignParamError, badRequest, InvalidParamError, serverError } from './signup-protocols'
 
 export class SignupController implements Controller {
-  constructor (private readonly emailValidator: EmailValidator) {}
+  constructor (
+    private readonly emailValidator: EmailValidator,
+    private readonly addAccountStub: AddAccount
+  ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -20,6 +24,13 @@ export class SignupController implements Controller {
 
       if (!this.emailValidator.validate(email)) {
         return badRequest(new InvalidParamError('email'))
+      }
+
+      const account = await this.addAccountStub.add(httpRequest.body)
+
+      return {
+        body: account,
+        statusCode: 201
       }
     } catch (error) {
       return serverError(error)
