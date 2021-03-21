@@ -14,6 +14,15 @@ describe('Signup Controller', () => {
     return new EmailValidatorStub()
   }
 
+  const makeFakeHttpRequest = (): HttpRequest => ({
+    body: {
+      email: 'valid_email@mail.com',
+      name: 'valid_name',
+      password: 'valid_password',
+      passwordConfirmation: 'valid_password'
+    }
+  })
+
   const makeAddAccountStub = (): AddAccount => {
     class AddAccountStub implements AddAccount {
       async add (account: AddAccountModel): Promise<AccountModel> {
@@ -159,16 +168,21 @@ describe('Signup Controller', () => {
     expect(httpResponse.statusCode).toBe(500)
   })
 
-  test('expect return an Account if correct values is provided', async () => {
+  test('should return an Account if correct values is provided', async () => {
     const { sut } = makeSut()
-    const httpResponse = await sut.handle({
-      body: {
-        email: 'valid_email@mail.com',
-        name: 'valid_name',
-        password: 'valid_password',
-        passwordConfirmation: 'valid_password'
-      }
-    })
+    const httpResponse = await sut.handle(makeFakeHttpRequest())
     expect(httpResponse.body.id).toBeTruthy()
+  })
+
+  test('should call addAccount with correct values', async () => {
+    const { sut, addAccountStub } = makeSut()
+    const addSpy = jest.spyOn(addAccountStub, 'add')
+    await sut.handle(makeFakeHttpRequest())
+    expect(addSpy).toHaveBeenLastCalledWith({
+      email: 'valid_email@mail.com',
+      name: 'valid_name',
+      password: 'valid_password',
+      passwordConfirmation: 'valid_password'
+    })
   })
 })
