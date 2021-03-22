@@ -16,6 +16,7 @@ Aplicação para controle de gastos.
 
 ### Transações (Transactions)
 - [ ] Adicionar transação
+- [ ] Mostrar histórico de transações
 
 ## Requitos não funcionais
 ### Conta (Account)
