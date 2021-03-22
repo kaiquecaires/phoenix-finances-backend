@@ -21,6 +21,7 @@ Aplicação para controle de gastos.
 ## Requitos não funcionais
 ### Conta (Account)
 - [ ] Visualizar informações da conta
+- [ ] Atualizar conta
 ### Patrimônio (Equity)
 - [ ] Opção de descrição ao adicionar ou remover saldo
 - [ ] Visualizar o histórico do saldo
